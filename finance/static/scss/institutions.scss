@@ -1,0 +1,17 @@
+table{
+
+	@media (min-width: 992px){
+		.count{
+			display:none
+		}
+	}
+	@media (max-width: 991px){
+		th {
+			display: flex;
+			justify-content: space-between;
+		}
+		td:nth-of-type(1){
+			display:none
+		}
+	}
+}

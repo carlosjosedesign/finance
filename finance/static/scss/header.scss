@@ -1,0 +1,121 @@
+header{
+	nav{
+		background: $grayscale1;
+		a, .nav-link{
+			color: $text !important;
+			font-weight: 600;
+			&:hover{
+				color: $blue !important;
+			}
+		}
+		.nav-link{
+			border-bottom: 2px solid transparent;
+			&:hover{
+				border-color: $blue;
+			}
+		}
+	}
+}
+
+
+/* logout button */
+.logout{
+    cursor: pointer;
+	svg{
+		width: 22px;
+	}
+	&:hover svg{
+		fill: $red;
+	}
+}
+
+/* Theme button */
+.choose-theme {
+
+	svg{
+		width: 18px;
+	}
+	& > div{
+		display: none;
+		cursor: pointer;
+		height: 25px;
+		align-items: center;
+	}
+	.active{
+		display: flex;
+	}
+}
+
+/* Currencies buttons */
+.choose-currency{
+	.currency-option{
+		border-color: $text;
+		color: $text;
+		width: 30px;
+		height: 30px;
+		padding: 0;
+		&.active{
+			background: $green;
+			color: white;
+		}
+		&:hover{
+			background: $blue;
+			color: white;
+		}
+	}
+}
+
+/* Language buttons */
+.choose-lang {
+
+	.lang-button {
+		border: none;
+		background: transparent;
+		opacity: 0.35;
+		padding: 0 4px;
+		&:hover {
+			opacity: 0.6;
+		}
+	}
+	.active {
+		opacity: 1;
+	}
+}
+
+/* Monetary Bar*/
+#monetary-bar{
+	background: $blue;
+	color:white;
+
+	.eye-display{
+		margin-left: 0.5em;
+		display: flex;
+    	align-items: center;
+
+		.eye{
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+
+			svg{
+				fill: white;
+				width: 18px;
+			}
+
+			&:hover svg{
+				fill: $green
+			}
+		}
+	}
+
+	#currencies-info{
+		gap: 20px;
+		.currency{
+			span{
+				color: $green;
+				font-weight: 600;
+			}
+		}
+	}
+}
+

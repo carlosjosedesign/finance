@@ -1,0 +1,44 @@
+{% extends "finance/layout.html" %}
+{% load static %}
+{% load i18n humanize %}
+
+{% block extra_css %}
+    <link href="{% static 'css/forms.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+{% load i18n humanize %}
+    <div class="register-wrapper">
+        <h1 class="mb-3">{% trans "Register" %}</h1>
+    
+        {% if message %}
+            <div>{{ message }}</div>
+        {% endif %}
+    
+        <form action="{% url 'finance:register' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group mb-3">
+                <input class="form-control" autofocus type="text" name="username" placeholder='{% trans "Username" %}' required>
+            </div>
+            <div class="form-group mb-3">
+                <input class="form-control" type="email" name="email" placeholder='{% trans "Email Address" %}' required>
+            </div>
+            <div class="form-group mb-3">
+                <input class="form-control" type="password" name="password" placeholder='{% trans "Password" %}' required>
+            </div>
+            <div class="form-group mb-3">
+                <input class="form-control" type="password" name="confirmation" placeholder='{% trans "Confirm Password" %}' required>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <input class="btn btn-primary px-4" type="submit" value='{% trans "Register" %}'>
+                </div>
+                <div class="col-12 col-md-6 text-end">
+                    {% trans "Already have an account?" %} <a class="color-green" href="{% url 'finance:login' %}"> {% trans "Log In here." %}</a>
+            </div>
+           
+        </form>
+    
+    </div>
+{% endblock %}

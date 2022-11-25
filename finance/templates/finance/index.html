@@ -1,0 +1,128 @@
+{% extends "finance/layout.html" %}
+{% load static %}
+{% load i18n humanize %}
+
+{% block extra_css %}
+<link href="{% static 'css/index.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+	<h1>{% trans "Wellcome to Finance!" %}</h1>
+
+	{% if LANGUAGE_CODE ==  "en" %}
+	<div class="text">
+		<p>
+			<h2>Designed to organize the purchases and sales of investments in a portfolio, showing a lot of wallet results.<br></h2>
+			<strong>It is not recommended for DAY TRADER, it will be better used for BUY AND HOLDER.</strong>
+		</p>
+		<h3>
+			With MyWallet you will allow for:
+		</h3>
+		<ol>
+			<li>Create investment types and organize them into types and portfolio weights</li>
+			<li>Create brokers to associate the actions</li>
+			<li>Register "BUY" and "SELL" investments</li>
+			<li>Register new transactions for your investments</li>
+			<li>The investment table can be filtered by investiment type</li>
+			<li>The investments table will show:
+				<ul>
+					<li>Real-time investment quotes</li>
+					<li>Current amount in the portfolio, in green for buy positions and in red for sell positions</li>
+					<li>The amount paid on the acquisition of the investment</li>
+					<li>The current value of the investment in the portfolioThe current value of the investment in the portfolio</li>
+					<li>The updated profit in % </li>
+					<li>The weight in % of each investment in the portfolio, and how much was planned</li>
+					<li>How much is left to buy what was planned for the stock</li>
+					<li>The related broker</li>
+					<li>If the position is zeroed, the line will turn into gray and it will show the realized profit in value and percentage</li>
+				</ul>
+			</li>
+			<li>The transaction's table can be filtered by investment</li>
+			<li>Create goals and measure how much is left to reach your ideal equity</li>
+		</ol>
+
+		<div class="row py-5 benefits">
+			<div class="col-12 col-lg-4 text-center mb-1 green">
+				<h4>
+					Being able to organize investments with classification notes and types.
+				</h4>
+			</div>
+			<div class="col-12 col-lg-4 text-center mb-1 red">
+				<h4>
+					Estimate the portfolio percentage and how much is left to match it.
+				</h4>
+			</div>
+			<div class="col-12 col-lg-4 text-center mb-1 blue">
+				<h4>
+					Calculations for both buy and sell asset positions.
+				</h4>
+			</div>
+		</div>
+		<div>
+			
+	
+		</div>
+
+	</div>
+	{% else %}
+	<div class="text">
+		<p>
+			<h2>Projeto para organizar as compras e vendas de investimentos em um portfólio mostrando diversos resultados da carteira.<br></h2>
+			<strong>Não é recomendado para DAY TRADER, será melhor usado para a técnica BUY AND HOLDER.</strong>
+		</p>
+		<h3>
+			Com MyWallet você poderá:
+		</h3>
+		<ol>
+			<li>Criar tipos de investimentos e organizar suas ações em setores e pesos na carteira</li>
+			<li>Criar corretoras para associar as ações</li>
+			<li>Cadastrar investimentos dos tipos de "COMPRA" e "VENDA"</li>
+			<li>Cadastar novas transações para seus investimentos</li>
+			<li>A tabela de investimentos poderá ser filtrada por tipo/li>
+			<li>A tabela de investimentos mostrará:</li>
+				<ul>
+					<li>A cotação dos investimentos em tempo real</li>
+					<li>A quantidade atual na carteira, em verde para posições de compra e em vermelho para venda</li>
+					<li>O valor pago na aquisição do investimento</li>
+					<li>O valor atual do investimento na carteira</li>
+					<li>O lucro em % atualizado</li>
+					<li>O peso em % de cada investimento na carteira, e o quanto foi planejado</li>
+					<li>Qunato falta para se comprar da ação de acordo com o planejado</li>
+					<li>A instituição relacionada  </li>
+					<li>Caso a posição esteja zerada, a linha ficará cinza e mostrará o lucro realizado em valor e em porcentagem</li>
+				</ul>
+			</li>
+			<li>A tabela de transações poderá ser filtrada por investimento</li>
+			<li>Criar metas e mensurar o quanto falta para alcançar seu patrimônio ideal</li>
+		</ol>
+
+		<div class="row py-5 benefits">
+			<div class="col-12 col-lg-4 text-center mb-1 green">
+				<h4>
+					Poder organizar os investimentos em notas de classificação e tipos.
+				</h4>
+			</div>
+			<div class="col-12 col-lg-4 text-center mb-1 red">
+				<h4>
+					Estimar a % na carteira e quanto falta para correspondê-la.
+				</h4>
+			</div>
+			<div class="col-12 col-lg-4 text-center mb-1 blue">
+				<h4>
+					Os cálculos funcionam tanto para posições de compra quanto para venda de ativos.
+				</h4>
+			</div>
+		</div>
+		<div>
+			
+	
+		</div>
+
+	</div>
+	{% endif %}
+
+{% endblock %}
+
+{% block script %}
+    
+{% endblock %}

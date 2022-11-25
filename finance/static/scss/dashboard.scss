@@ -1,0 +1,102 @@
+@import 'theme';
+
+#dashboard-bar{
+	padding: 0.5em 1em;
+	background: $grayscale2;
+
+	#goals{
+		display: flex;
+		justify-content: space-between;
+		position: relative;
+
+		label{
+
+		}
+		.selected-goal{
+			
+		}
+		.arrow{
+			padding: 0 0.2em;
+			cursor: pointer;
+			svg{
+				width:20px;
+			}
+		}
+		.goals{
+			background: $grayscale2;
+			position: absolute;
+			top: 22px;
+			width: 100%;
+			display: none;
+			padding: 5px 0;
+
+			.goal{
+				display:flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 5px 10px;
+
+				.status{
+					&.off{
+						color: $red
+					}
+					&.on{
+						color: $green
+					}
+				}
+			}
+		}
+		&:hover .goals, .goals:hover{
+			display:block
+		}
+	}
+	
+}
+
+@keyframes hideGoal{
+    0% {
+        opacity: 1;
+        height: 100%;
+        transform: translate(0, 0);
+		display: table-row;
+    }50% {
+        opacity: 0;
+        height: 0; 
+        transform: translate(-100%, 0);
+		display: table-row;
+    }100% {
+        opacity: 0;
+        height: 0; 
+        transform: translate(-100%, -100%);
+		display: none;
+    }
+}
+
+.goal.hide{
+	animation: hideGoal 1s ease-out;
+	animation-fill-mode: forwards;
+}
+
+
+table{
+	.actions {
+		width: 110px;
+	}
+}
+
+
+@media(max-width:768px){
+	#goals{
+		flex-wrap: wrap;
+
+		.goals{
+			position: relative !important;
+			top: 0 !important;
+			padding-top: 15px !important;
+			.goal{
+				padding: 5px 0 !important;
+			}
+		}
+	}
+	
+}

@@ -1,0 +1,233 @@
+{% extends "finance/layout.html" %}
+{% load static %}
+{% load filter %}
+{% load i18n humanize %}
+
+{% block extra_css %}
+<link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+	<div class="head d-md-flex justify-content-between align-items-center mb-3">
+		<h1>Dashboard</h1>
+		<div class="ms-auto d-flex justify-content-md-end">
+			<button class="btn btn-info me-3" data-bs-toggle="modal" data-bs-target="#typeModal">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+				<span>{% trans "Add" %} {% trans "investiment type" %}</span>
+			</button>
+			<button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#goalModal">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+				<span>{% trans "Add" %} {% trans "goal" %}</span>
+			</button>
+		</div>
+	</div>
+
+	{% if messages %}
+	<ul class="messages px-0">
+		{% for message in messages %}
+			<div class="alert {% if message.tags %}alert-{% if message.tags == 'error' %}danger{% else %}{{message.tags}}{% endif %}{% endif %}" role="alert">{{ message }}</div>
+		{% endfor %}
+	</ul>
+	{% endif %}
+
+
+	{% include "finance/forms/investiment_type_form.html" %} 
+	{% include "finance/forms/goal_form.html" %} 
+
+	<div id="dashboard-bar" class="row mx-0 mb-4">
+		<div class="col-12 col-md-3">
+			{% trans "In Wallet" %}: <span class="blur with-blur">{{userCurrency}} {% moeda balance.total userCurrency%}</span>
+		</div>
+		<div class="col-12 col-md-3">
+			{% trans "Invested" %}: {{userCurrency}} <span class="blur with-blur">{% moeda balance.invested userCurrency%}</span>
+		</div>
+		<div class="col-12 col-md-3">
+			{% trans "Profit" %}: <span class="blur with-blur">{{balance.profit}}%</span>
+		</div>
+		<div id="goals" class="col-12 col-md-3">
+			<label>{% trans "Goals" %}:</label>
+			{% if goals %}
+			<div class="selected-goal">{{userCurrency}} {% moeda nowGoal userCurrency %}</div>
+			
+			<div class="arrow">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
+			</div>
+
+			<div class="goals">
+				{% for goal in goals %}
+					<div id="goal-{{goal.id}}" class="goal">
+						<span>{{userCurrency}} {% moeda goal.value userCurrency %}</span>
+						<span class="status {{ goal.status }}">{{ goal.lack }}%</span>
+						<a class="btn btn-danger {% if goal.status == 'on' %}btn-success {% endif %}delete" data-bs-toggle="modal" data-bs-target="#modal_delete_goal" onclick="modalDelete('{{goal.id}}', event.target)">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
+						</a>
+					</div>
+				{% endfor %}
+			</div>
+			{% endif %}
+		</div>
+		
+		
+	</div>
+	
+	{% if types %}
+	<div class="row">
+		<div class="col-12 col-lg-7 order-2 order-lg-1">
+
+			<table id="types-table" class="table table-secondary {% if user.preferences.theme == 'dark' %}table-dark {% endif %}table-striped">
+				<thead>
+					<tr>
+						<th scope="col"></th>
+						<th scope="col">{% trans "Name" %}</th>
+						<th scope="col">{% trans "Accumulated" %}</th>
+						<th scope="col">{% trans "Expected" %}</th>
+						<th scope="col">{% trans "Ideal" %}</th>
+						<th scope="col">{% trans "Now" %}</th>
+						<th scope="col" class="actions"></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for type in types %}
+					<tr id="type-{{type.id}}">
+						<input type="hidden" class="color" value="{{ type.color }}">
+						<th scope="row" class="bgcolor" style="background:{{ type.color }}; box-shadow:none;"> </th>
+						{% with type.typeName as typeName %}
+						<th class="name"><span class="value">{{ typeName }}</span></th>
+						
+						<td>
+							<label>{% trans "Accumulated" %}:</label>
+							<span class="accumulated value with-blur blur">
+								{{userCurrency}} 
+								{% moeda balance.typesTotal|get_dic:typeName  userCurrency %}
+							</span>		
+						</td>
+		
+						<td>
+							<label>{% trans "Expected" %}:</label>
+							<span class="value with-blur blur">
+								{{userCurrency}} 
+								{% moeda balance.typesExpected|get_dic:typeName  userCurrency %}
+							</span>		
+						</td>
+		
+						<td class="percent">
+							<label>{% trans "Ideal" %}:</label>
+							<span class="value">
+								{{ type.percent }}%
+							</span>
+						</td>
+						<td>
+							<label>{% trans "Now" %}:</label>
+							<span class="now_wallet value">
+								{% commaReplace nowPercetages|get_dic:typeName %}%
+							</span>
+						</td>
+		
+						<td class="actions">
+							<a class="btn btn-primary edit me-3" data-bs-toggle="modal" data-bs-target="#modal_edit_type" onclick="modalEdit('{{type.id}}', event.target)">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/></svg>
+							</a>
+							<a class="btn btn-danger delete" data-bs-toggle="modal" data-bs-target="#modal_delete_type" onclick="modalDelete('{{type.id}}', event.target); setRemoveItem('{{type.id}}')">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
+							</a>
+						</td>
+		
+						{% endwith %}
+					</tr>
+					{% endfor %}
+				</tbody>
+				
+			</table>
+		
+			
+		</div>
+		<div id="charts" class="col-12 col-md-5 col-lg-4 order-lg-2 mb-5 mx-auto">
+			<div>
+				<canvas id="myChart"></canvas>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Modals -->
+	<div class="modal fade delete-modal" id="modal_delete_type" tabindex="-1" role="dialog" aria-labelledby="modal_delete_type_label" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+				<h5 class="modal-title" id="modal_delete_type_label">{% trans "Are you sure?" %}</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					{% trans "Are you sure you want to delete this " %}{% trans "investiment type" %}?{% trans "This procedure is irreversible!" %}
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary modal-close" data-bs-dismiss="modal">{% trans "Close" %}</button>
+					<button type="button" class="btn btn-danger modal-delete" data-id="" onclick="deleteThis('type',event)">{% trans "Delete" %}</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="modal fade edit-modal" id="modal_edit_type" tabindex="-1" role="dialog" aria-labelledby="modal_edit_type_label" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+				<h5 class="modal-title" id="modal_edit_type_label_label">{% trans "Edit" %} {% trans "investiment type" %}</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<form id="edit-type-form">
+						
+						<div class="form-group mb-3">
+							{{ type_form.typeName.label }}
+							<input type="text" name="typeName" id="type-name" value="" placeholder="" class="form-control">
+						</div>
+						
+						<div class="form-group mb-3">
+							{{ type_form.percent.label }}
+							{{ type_form.percent }}
+							<span id="modal-percentage-declare" class="percentage-declare">1%</span>
+						</div>
+						<div class="form-group mb-3">
+							{{ type_form.color.label }}
+							{{ type_form.color }}
+						</div>
+						
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary modal-close" data-bs-dismiss="modal">{% trans "Close" %}</button>
+					<button type="button" class="btn btn-primary modal-save"  data-id="" onclick="editThis('type',event)">{% trans "Save" %}</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade delete-modal" id="modal_delete_goal" tabindex="-1" role="dialog" aria-labelledby="modal_delete_goal_label" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+				<h5 class="modal-title" id="modal_delete_goal_label">{% trans "Are you sure?" %}</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					{% trans "Are you sure you want to delete this " %}{% trans "goal" %}?{% trans "This procedure is irreversible!" %}
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary modal-close" data-bs-dismiss="modal">{% trans "Close" %}</button>
+					<button type="button" class="btn btn-danger modal-delete" data-id="" onclick="deleteThis('goal',event)">{% trans "Delete" %}</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{% endif %}
+
+{% endblock %}
+
+
+
+{% block script %}
+<script src="{% static 'js/chart.js' %}"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,70 @@
+// Buttons
+.btn{
+	&.btn-primary{
+		background-color: $blue;
+		border-color: $blue;
+	}
+	&.btn-success{
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
+		background-color: $green;
+		border-color: $green;
+	}
+	&.btn-info{
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
+	}
+
+	svg{
+		width: 18px;
+	}
+
+	&.buy, &.sell, &.delete, &.edit{
+		width: 30px;
+		height: 30px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 100%;
+		padding: 1px;
+		svg{
+			width: 12px;
+			fill: white;
+		}
+	}
+
+	&.delete, &.edit{
+		svg, svg *{
+			pointer-events: none;
+		}
+	}
+}
+
+// Back button
+.go-back{
+	margin-top: -1em;
+    margin-bottom: 1em;
+	svg{
+		width: 18px;
+	}
+	a.back {
+		background: white;
+		border: 1px solid $text;
+		border-radius: 100%;
+		width: 30px;
+		height: 30px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		&:hover{
+			background: $text;
+			svg{
+				fill: white;	
+			}
+		}
+	}
+	
+}

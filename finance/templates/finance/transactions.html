@@ -1,0 +1,196 @@
+{% extends "finance/layout.html" %}
+{% load static %}
+{% load filter %}
+{% load i18n humanize %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/flatpickr@4.5.2/dist/flatpickr.min.css" media="all" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/flatpickr@4.5.2/dist/themes/material_blue.css" media="all" rel="stylesheet">
+<link href="{% static 'css/transactions.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+
+{% include "finance/forms/transaction_form.html" %} 
+
+<div class="go-back">
+	<a href="{% url 'finance:investiments' %}" class="back">
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+	</a>
+</div>
+<div class="head d-md-flex justify-content-between align-items-center mb-3">
+	<h1>{% trans 'Transactions' %}</h1>
+
+	{% if investiments %}
+	<div id="changeInvestiment" class="col-12 col-md-4 mb-2 mb-md-0">
+		{{ transaction_form.investiment.label }}
+		<select class="form-control">
+			<option value="">----</option>
+			{% for investiment in investiments %}
+			<option value="{{investiment.id}}"{% if request.GET.i == investiment.id|stringformat:"s" %}selected{% endif %}> {{investiment.code}} </option>
+			{% endfor %}
+		</select>
+	</div>
+	{% endif %}
+
+	<button class="btn btn-success ms-auto ms-md-0" data-bs-toggle="modal" data-bs-target="#transactionModal" onclick="newTransaction()">
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+		<span>{% trans "Add" %} {% trans 'transaction' %}</span>
+	</button>
+</div>
+
+
+{% if messages %}
+<ul class="messages px-0">
+    {% for message in messages %}
+    	<div class="alert {% if message.tags %}alert-{% if message.tags == 'error' %}danger{% else %}{{message.tags}}{% endif %}{% endif %}" role="alert">{{ message }}</div>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if transactions %}
+<table class="table table-secondary {% if user.preferences.theme == 'dark' %}table-dark {% endif %}table-striped">
+	<thead>
+		<tr>
+			<th scope="col">{% trans "Investiment" %}</th>
+			<th scope="col">{% trans "Position" %}</th>
+			<th scope="col">{% trans "Quantity" %}</th>
+			<th scope="col">{% trans "Price" %}</th>
+			<th scope="col">{% trans "Total" %}</th>
+			<th scope="col">{% trans "Transaction date" %}</th>
+			<th scope="col" class="actions">Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for transaction in transactions %}
+		<tr id="transaction-{{transaction.id}}">
+
+			{% with transactionTotal=transaction.payprice|multiply:transaction.quantity  %}
+			<input type="hidden" id="transaction-flatpickr-date" value="{{ transaction.realDate }}">
+			<th scope="row" class="code">{{ transaction.investiment.code }}</th>
+			<th scope="row" class="action">
+				<label>
+					{% trans "Position" %}:
+				</label>
+				<span class="value">{{ transaction.action }}</span>
+			</th>
+			<th scope="row" class="quantity">
+				<label>
+					{% trans "Quantity" %}:
+				</label>
+				<span class="value">
+				{% commaReplace transaction.quantity %}
+				</span>
+			</th>
+			<th scope="row">
+				<label>
+					{% trans "Price" %}:
+				</label>
+				<span class="payprice">
+					<span class="currency">{{ transaction.investiment.currency }}</span> <span class="value">{% moeda transaction.payprice transaction.investiment.currency  %}</span></th>
+				</span>
+			<th scope="row" class="total">
+				<label>
+					{% trans "Total" %}:
+				</label>
+				<span class="totalprice">
+					<span class="currency">{{ transaction.investiment.currency }}</span><span class="value">{% moeda transactionTotal transaction.investiment.currency  %}</span></th>
+				</span>
+			<th scope="row" class="transaction_date">
+				<label>
+					{% trans "Transaction date" %}:
+				</label>
+				<span class="value">
+					{{ transaction.transaction_date }}
+				</span>
+			</th>
+			<td class="actions">
+				<a class="btn btn-primary edit me-3" data-bs-toggle="modal" data-bs-target="#modal_edit_transaction" onclick="modalEdit('{{transaction.id}}', event.target)">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/></svg>
+				</a>
+				<a class="btn btn-danger delete" data-bs-toggle="modal" data-bs-target="#modal_delete_transaction" onclick="modalDelete('{{transaction.id}}', event.target)">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
+				</a>
+			</td>
+
+			{% endwith %}
+		</tr>
+		{% endfor %}
+	</tbody>
+
+</table>
+{% include "finance/paginator.html"%}
+
+
+<!-- Modals -->
+<div class="modal fade delete-modal" id="modal_delete_transaction" tabindex="-1" role="dialog" aria-labelledby="modal_delete_transaction_label" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+			<h5 class="modal-title" id="modal_delete_transaction_label">{% trans "Are you sure?"%}</h5>
+			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				{% trans "Are you sure you want to delete this " %}{% trans "transaction" %}?{% trans "This procedure is irreversible!" %}
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary modal-close" data-bs-dismiss="modal">{% trans "Close" %}</button>
+				<button type="button" class="btn btn-danger modal-delete" data-id="" onclick="deleteThis('transaction',event)">{% trans "Delete" %}</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade edit-modal" id="modal_edit_transaction" tabindex="-1" role="dialog" aria-labelledby="modal_edit_transaction_label" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+			<h5 class="modal-title" id="modal_edit_transaction_label_label">{% trans "Edit" %} {% trans "transaction" %}</h5>
+			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form id="edit-transaction-form">
+					<div class="form-group mb-3">
+						{{ transaction_form.action.label }}
+						<select name="action" class="form-control" id="transaction-action">
+							<option value="BUY">{% trans "BUY" %}</option>
+							<option value="SELL">{% trans "SELL" %}</option>
+						</select>
+					</div>
+		
+					<div class="form-group mb-3">
+						{{ transaction_form.quantity.label }}
+						<input type="number" step="0.01" min="0.01" name="quantity" id="transaction-quantity" value="" placeholder="{% trans 'Quantity' %}" class="form-control">
+					</div>
+					<div class="form-group mb-3">
+						{{ transaction_form.payprice.label }}
+						<input type="number" step="0.01" min="0.01" name="payprice" id="transaction-payprice" value="" placeholder="{% trans 'Price' %}" class="form-control">
+					</div>
+					<div class="form-group mb-3">
+						{{ transaction_form.transaction_date.label }}
+						<input type="hidden" name="transaction_date" id="transaction-transaction_date" fp_config="{&quot;id&quot;: &quot;fp_1&quot;, &quot;picker_type&quot;: &quot;DATE&quot;, &quot;linked_to&quot;: null, &quot;options&quot;: {&quot;altFormat&quot;: &quot;d F Y&quot;, &quot;altInput&quot;: true, &quot;dateFormat&quot;: &quot;Y-m-d&quot;, &quot;mode&quot;: &quot;single&quot;}}" class="flatpickr-input">
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary modal-close" data-bs-dismiss="modal">{% trans "Close" %}</button>
+				<button type="button" class="btn btn-primary modal-save"  data-id="" onclick="editThis('transaction',event)">{% trans "Save" %}</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% else %}
+	{% trans "You don't have transactions yet" %}
+{% endif %}
+
+
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/transactions.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.5.2/dist/flatpickr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/monim67/django-flatpickr@1.0.0/static/js/django-flatpickr.js"></script>
+{% endblock %}

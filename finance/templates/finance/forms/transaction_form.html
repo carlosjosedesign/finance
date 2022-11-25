@@ -1,0 +1,48 @@
+{% load i18n humanize %}
+
+<div class="modal fade" id="transactionModal" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="transactionModalLabel">{% trans "Add" %} {% trans "transaction" %}</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form action="{% url 'finance:transactions'%}" method="post" enctype="multipart/form-data" >
+			<div class="modal-body">
+
+				{% csrf_token %}
+				<div class="row align-items-center">
+							
+					<div class="form-group mb-3 col-12 col-md-6">
+						{{ transaction_form.investiment.label }}
+						{{ transaction_form.investiment }}
+					</div>
+					<div class="form-group mb-3 col-12 col-md-6">
+						{{ transaction_form.action.label }}
+						{{ transaction_form.action }}
+					</div>
+
+					<div class="form-group mb-3 col-12 col-md-6">
+						{{ transaction_form.quantity.label }}
+						{{ transaction_form.quantity }}
+					</div>
+					<div class="form-group mb-3 col-12 col-md-6">
+						{{ transaction_form.payprice.label }}
+						{{ transaction_form.payprice }}
+					</div>
+					<div class="form-group mb-3 col-12 col-md-6">
+						{{ transaction_form.transaction_date.label }}
+						{{ transaction_form.transaction_date }}
+					</div>
+					
+				</div>
+					
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-secondary" name="cancel" data-bs-dismiss="modal">{% trans "Cancel" %}</button></a>  
+				<input class="btn btn-success" type="submit" value={% trans "Add" %}>
+			</div>
+			</form>
+		</div>
+	</div>
+</div>

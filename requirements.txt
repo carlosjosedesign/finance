@@ -1,0 +1,5 @@
+yfinance==0.1.84
+yahooquery==2.2.15
+forex-python==1.8
+django-colorfield==0.7.2
+django-flatpickr==1.0.1

@@ -1,0 +1,124 @@
+{% extends "finance/layout.html" %}
+{% load static %}
+{% load i18n humanize %}
+
+{% block body %}
+
+{% block extra_css %}
+<link href="{% static 'css/institutions.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% include "finance/forms/institution_form.html" %} 
+
+<div class="go-back">
+	<a href="{% url 'finance:investiments' %}" class="back">
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+	</a>
+</div>
+<div class="head d-md-flex justify-content-between align-items-center mb-3">
+	<h1>{% trans 'Institutions' %}</h1>
+	<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#institutionModal">
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+		<span>{% trans "Add" %} {% trans 'institution' %}</span>
+	</button>
+</div>
+
+
+{% if messages %}
+<ul class="messages px-0">
+    {% for message in messages %}
+    	<div class="alert {% if message.tags %}alert-{% if message.tags == 'error' %}danger{% else %}{{message.tags}}{% endif %}{% endif %}" role="alert">{{ message }}</div>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if institutions %}
+<table class="table table-secondary {% if user.preferences.theme == 'dark' %}table-dark {% endif %}table-striped">
+	<thead>
+		<tr>
+			<th scope="col">{% trans "Name" %}</th>
+			<th scope="col">{% trans "Investiments" %}</th>
+			<th scope="col" class="actions">{% trans "Actions" %}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for institution in institutions %}
+		<tr id="institution-{{institution.id}}">
+			<th scope="row" class="name">
+				<span class="value">
+					{{ institution.name }}
+				</span>
+				<span class="count">
+					{{ institution.investiments }}
+				</span>
+			</th>
+			<td>{{ institution.investiments }}</td>
+			<td class="actions">
+				<a class="btn btn-danger delete me-3" data-bs-toggle="modal" data-bs-target="#modal_delete_institution" onclick="modalDelete('{{institution.id}}', event.target)">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
+				</a>
+				<a class="btn btn-primary edit" data-bs-toggle="modal" data-bs-target="#modal_edit_institution" onclick="modalEdit('{{institution.id}}', event.target)">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/></svg>
+				</a>
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+	
+</table>
+{% include "finance/paginator.html"%}
+
+
+<!-- Modals -->
+<div class="modal fade delete-modal" id="modal_delete_institution" tabindex="-1" role="dialog" aria-labelledby="modal_delete_institution_label" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+			<h5 class="modal-title" id="modal_delete_institution_label">{% trans "Are you sure?"%}</h5>
+			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				{% trans "Are you sure you want to delete this " %}{% trans "institution" %}?{% trans "This procedure is irreversible!" %}
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary modal-close" data-bs-dismiss="modal">{% trans "Close" %}</button>
+				<button type="button" class="btn btn-danger modal-delete" data-id="" onclick="deleteThis('institution',event)">{% trans "Delete" %}</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade edit-modal" id="modal_edit_institution" tabindex="-1" role="dialog" aria-labelledby="modal_edit_institution_label" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+			<h5 class="modal-title" id="modal_edit_institution_label_label">{% trans "Edit" %} {% trans "institution" %}</h5>
+			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form id="edit-institution-form">
+					<div class="form-group mb-3">
+						<input type="text" name="name" id="institution-name" value="" placeholder="" class="form-control">
+					</div>
+				</form>
+				
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary modal-close" data-bs-dismiss="modal">{% trans "Close" %}</button>
+				<button type="button" class="btn btn-primary modal-save" data-id="" onclick="editThis('institution',event)">{% trans "Save" %}</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% else %}
+	{% trans "You don't have any registred institutions" %}
+{% endif %}
+
+
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/institutions.js' %}"></script>
+{% endblock %}

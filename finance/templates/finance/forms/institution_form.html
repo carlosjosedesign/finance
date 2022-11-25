@@ -1,0 +1,27 @@
+{% load i18n humanize %}
+
+<div class="modal fade" id="institutionModal" tabindex="-1" aria-labelledby="institutionModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="institutionModalLabel">{% trans "Add" %} {% trans "institution" %}</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form action="#" id="add-institution-form">
+			<div class="modal-body">
+
+					{% csrf_token %}
+					<div class="form-group mb-3">
+						{{ institution_form.name.label }}
+						{{ institution_form.name }}
+					</div>
+					
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-secondary" name="cancel" data-bs-dismiss="modal">{% trans "Cancel" %}</button></a>  
+				<input class="btn btn-success" type="submit" value={% trans "Add" %}>
+			</div>
+			</form>
+		</div>
+	</div>
+</div>

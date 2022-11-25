@@ -1,0 +1,85 @@
+body.theme-dark{
+	$bg:#18191a;
+	$text: #E4E6EB;
+	$darktext: #111;
+	$grayscale1:#292929;
+	$grayscale2:#242526;
+
+	background: $bg;
+	color: $text;
+
+header{
+	nav{
+		background: $grayscale1;
+		a, .nav-link{
+			color: $text !important;
+			&:hover{
+				color: $text !important;
+			}
+		}
+		.nav-link{
+			&:hover{
+				border-color: $text;
+			}
+		}
+	}
+	.navbar-toggler-icon{
+		filter: brightness(100) contrast(100) invert(1);
+		-moz-filter:brightness(100) contrast(100) invert(1);
+		-webkit-filter:brightness(100) contrast(100) invert(1);
+	}
+}
+
+.choose-currency{
+	.currency-option{
+		border-color: $text;
+		color: $text;
+	}
+
+}
+
+.logout{
+	svg{
+		fill: $text;
+	}
+	&:hover svg{
+		fill: $red;
+	}
+}
+
+
+#dashboard-bar{
+	background: $grayscale2;
+	.arrow{
+		svg{
+			fill: $text;
+		}
+	}
+	.goals{
+		span:not(.status){
+			color: $darktext;
+		}
+		
+	}
+}
+
+#thisWalletTotal{
+	.total{
+		color:$darktext;
+	}
+	
+}
+
+.modal{
+	.modal-content{
+		background-color: $grayscale1;
+		// color: $darktext;
+		border: 1px solid $text;
+		.btn-close{
+			color: $text;
+			filter: invert(1);
+		}
+	}
+}
+
+}

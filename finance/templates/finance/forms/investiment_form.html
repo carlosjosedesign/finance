@@ -1,0 +1,73 @@
+{% load i18n humanize %}
+
+<div class="modal fade" id="investimentModal" tabindex="-1" aria-labelledby="investimentModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="investimentModalLabel">{% trans "Add" %} {% trans "investiment" %}</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form action="{% url 'finance:investiments'%}" method="post" enctype="multipart/form-data">
+			<div class="modal-body">
+
+				{% csrf_token %}
+				<div class="row align-items-center">
+						
+					<div class="form-group mb-3 col-10 col-md-11">
+						{{ investiment_form.type.label }}
+						{{ investiment_form.type }}
+					</div>
+					<div class="col-2 col-md-1">
+						<a class="btn btn-info rounded" data-bs-toggle="modal" data-bs-target="#typeModal">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+						</a>
+					</div>
+					<div class="form-group mb-3 col-10 col-md-11">
+						{{ investiment_form.institution.label }}
+						{{ investiment_form.institution }}
+					</div>
+					<div class="col-2 col-md-1">
+						<a class="btn btn-info rounded" data-bs-toggle="modal" data-bs-target="#institutionModal">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+						</a>
+					</div>
+					<div class="form-group mb-3 col-12 col-md-6">
+						{{ transaction_form.action.label }}
+						{{ transaction_form.action }}
+					</div>
+					<div class="form-group mb-3 col-12 col-md-6">
+						{{ investiment_form.code.label }}
+						{{ investiment_form.code }}
+					</div>
+					<div class="form-group mb-3 col-12 col-md-6">
+						{{ investiment_form.rating.label }}
+						{{ investiment_form.rating }}
+					</div>
+					<div class="form-group mb-3 col-12 col-md-6">
+						{{ investiment_form.currency.label }}
+						{{ investiment_form.currency }}
+					</div>
+					<div class="form-group mb-3 col-12 col-md-6">
+						{{ transaction_form.quantity.label }}
+						{{ transaction_form.quantity }}
+					</div>
+					<div class="form-group mb-3 col-12 col-md-6">
+						{{ transaction_form.payprice.label }}
+						{{ transaction_form.payprice }}
+					</div>
+					<div class="form-group mb-3 col-12 col-md-6">
+						{{ transaction_form.transaction_date.label }}
+						{{ transaction_form.transaction_date }}
+					</div>
+					
+				</div>
+					
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-secondary" name="cancel" data-bs-dismiss="modal">{% trans "Cancel" %}</button></a>  
+				<input class="btn btn-success" type="submit" value={% trans "Add" %}>
+			</div>
+			</form>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,68 @@
+
+@keyframes hideLine {
+    0% {
+        opacity: 1;
+        height: 100%;
+        transform: translate(0, 0);
+		display: table-row;
+    }50% {
+        opacity: 0;
+        height: 0; 
+        transform: translate(-100%, 0);
+		display: table-row;
+    }100% {
+        opacity: 0;
+        height: 0; 
+        transform: translate(-100%, -100%);
+		display: none;
+    }
+}
+
+// Tables
+table{
+	tbody{
+		tr{
+			&.hide{
+				animation: hideLine 1s ease-out;
+				animation-fill-mode: forwards;
+			}
+		}
+		
+		.actions{
+			display: table-cell;
+			button, a{
+				display: inline-flex !important;
+			}
+		}
+	}
+
+	label{
+		width: 40%;
+	}
+
+	@media(min-width:992px){
+		label{display:none;}	
+	}
+
+	@media(max-width:991px){
+		thead {
+			display:none;
+		}
+		tr{
+			display: flex;
+    		flex-direction: column;
+			margin-bottom: 30px;
+			td, th{
+				width: 100% !important;
+			}
+
+		}
+		.actions{
+			text-align: center;
+		}
+		.code{
+			padding-left: calc(40% + 5px);
+		}
+	}
+}
+
