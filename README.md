@@ -94,8 +94,8 @@ Dashboard shows the portfolio total, how much has been invested and the overall 
 O Dashboard mostra o total do portfólio, o quanto foi investito, e o lucro geral. Além das metas e o gráfico da % de cada tipo de investimento sob o patrimônio.
 
 ### Screenshots
-<img src="finance/static/images/dashboard.gif" width=48% style="margin-bottom: 10px;margin-right: 2%;"/><img src="finance/static/images/investiments.gif" width=48% style="margin-bottom: 10px;margin-left: 2%;"/>
-<img src="finance/static/images/institutions.png" width=48% style="margin-bottom: 10px;margin-right: 2%;"/><img src="finance/static/images/transactions.png" width=48% style="margin-bottom: 10px;margin-left: 2%;"/>
+<img src="finance/static/images/dashboard.gif" width=47% style="margin-bottom: 10px;margin-right: 1%;"/><img src="finance/static/images/investiments.gif" width=50% style="margin-bottom: 10px;margin-left: 2%;"/>
+<img src="finance/static/images/institutions.png" width=52% style="margin-bottom: 10px;margin-right: 2%;"/><img src="finance/static/images/transactions.png" width=45% style="margin-bottom: 10px;margin-left: 2%;"/>
 
 <img src="finance/static/images/investimentos.PNG" width=100% style="margin-bottom: 10px;"/>
 
