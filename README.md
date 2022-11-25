@@ -99,7 +99,7 @@ O Dashboard mostra o total do portfólio, o quanto foi investito, e o lucro gera
 
 <img src="finance/static/images/investimentos.PNG" width=100% style="margin-bottom: 10px;"/>
 
-<img src="finance/static/images/dashboard_mobile.png" width=33% style="margin-bottom: 10px;"/><img src="finance/static/images/investiments_mobile.gif" width=33% style="margin-bottom: 10px;"/><img src="finance/static/images/transactions_mobile.png" width=33% style="margin-bottom: 10px;"/>
+<img src="finance/static/images/dashboard_mobile.png" width=31.7% style="margin-bottom: 10px;"/><img src="finance/static/images/investiments_mobile.gif" width=34% style="margin-bottom: 10px;"/><img src="finance/static/images/transactions_mobile.png" width=31.7% style="margin-bottom: 10px;"/>
 
 
 ## Dark mode
