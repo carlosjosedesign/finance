@@ -94,21 +94,16 @@ Dashboard shows the portfolio total, how much has been invested and the overall 
 O Dashboard mostra o total do portfólio, o quanto foi investito, e o lucro geral. Além das metas e o gráfico da % de cada tipo de investimento sob o patrimônio.
 
 ### Screenshots
-<img src="finance/static/images/dashboard.gif" width=48% style="margin-bottom: 10px;margin-right: 2%;"/>
-<img src="finance/static/images/investiments.gif" width=48% style="margin-bottom: 10px;margin-left: 2%;"/>
-<img src="finance/static/images/institutions.png" width=48% style="margin-bottom: 10px;margin-right: 2%;"/>
-<img src="finance/static/images/transactions.png" width=48% style="margin-bottom: 10px;margin-left: 2%;"/>
+<img src="finance/static/images/dashboard.gif" width=48% style="margin-bottom: 10px;margin-right: 2%;"/><img src="finance/static/images/investiments.gif" width=48% style="margin-bottom: 10px;margin-left: 2%;"/>
+<img src="finance/static/images/institutions.png" width=48% style="margin-bottom: 10px;margin-right: 2%;"/><img src="finance/static/images/transactions.png" width=48% style="margin-bottom: 10px;margin-left: 2%;"/>
 
 <img src="finance/static/images/investimentos.PNG" width=100% style="margin-bottom: 10px;"/>
 
-<img src="finance/static/images/dashboard_mobile.png" width=33% style="margin-bottom: 10px;"/>
-<img src="finance/static/images/investiments_mobile.gif" width=33% style="margin-bottom: 10px;"/>
-<img src="finance/static/images/transactions_mobile.png" width=33% style="margin-bottom: 10px;"/>
+<img src="finance/static/images/dashboard_mobile.png" width=33% style="margin-bottom: 10px;"/><img src="finance/static/images/investiments_mobile.gif" width=33% style="margin-bottom: 10px;"/><img src="finance/static/images/transactions_mobile.png" width=33% style="margin-bottom: 10px;"/>
 
 
 ## Dark mode
-<img src="finance/static/images/dashboard_darkmode.png" width=48% style="margin-bottom: 10px;margin-right: 2%;"/>
-<img src="finance/static/images/investiments_darkmode.png" width=48% style="margin-bottom: 10px;margin-left: 2%;"/>
+<img src="finance/static/images/dashboard_darkmode.png" width=48% style="margin-bottom: 10px;margin-right: 2%;"/><img src="finance/static/images/investiments_darkmode.png" width=48% style="margin-bottom: 10px;margin-left: 2%;"/>
 
 ## Files Description 
 - [X] balance.py - Use Invesiment and Transaction model to calculate total (gerneral, by type and invested) and profit. Use this file in all pages besides investiments view ( this page already has its own calculation
