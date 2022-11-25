@@ -105,6 +105,13 @@ def getPrices(request):
 
         return JsonResponse({"success": nowPrices }, status=201)
 
+def getPrice(request, code):
+    print('CODE:', code)
+    price = get_price(code)
+    print(price)
+
+    return render(request, "finance/index.html")
+
 @login_required(login_url="finance:login")
 def investiments(request):
 
