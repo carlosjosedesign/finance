@@ -24,7 +24,7 @@ const modalEdit = (id, element) => {
 
 	const transactionDate = document.querySelector(`#transaction-${id} #transaction-flatpickr-date`).value
 	const modalDate= modal.querySelector('#transaction-transaction_date')
-	console.log(transactionDate)
+	// console.log(transactionDate)
 	
 	let calendar = flatpickr(modalDate);
 	calendar.setDate(transactionDate, "Y-m-d")
@@ -55,7 +55,7 @@ const changeTotal = () => {
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const page_param = urlParams.get('i')
-console.log(page_param);
+// console.log(page_param);
 
 const newTransaction = () => {
 	const transactionModal = document.getElementById('transactionModal')

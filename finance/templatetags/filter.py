@@ -96,7 +96,7 @@ def profit(price, qnt, pay, position):
 
 @register.simple_tag
 def fixRevenue(revenue, action, currency):
-    print('fixRevenue',revenue)
+    #print('fixRevenue',revenue)
     if action == 'SELL':
         return formatfunc(revenue * -1.00, currency)
     

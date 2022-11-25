@@ -60,7 +60,7 @@ def monetaryConversor(from_currency, to_currency, amount):
 	cr = CurrencyRates()
 	output = cr.convert(from_currency, to_currency, amount)
 	output = round(output,2)
-	print(output)
+	# print(output)
 	return output
 
 	

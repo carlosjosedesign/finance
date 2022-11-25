@@ -42,7 +42,7 @@ const refreshTheme = () => {
 
 const setCurrency = currency => {
 
-    console.log(currency)
+    // console.log(currency)
     document.querySelector(`.choose-currency input[value="${currency}"]`).classList.add('active')
 
     let csrftoken = getCookie('csrftoken');
@@ -160,16 +160,16 @@ const postThis = (url, form, modal, _callback) => {
             _callback(result); 
         }
         else {
-            console.log(result)
+            // console.log(result)
             for (let error in result.error) {
-                console.log(error);
+                // console.log(error);
                 document.querySelector(`input[name="${error}"]`).classList.add('is-invalid')
             }
             throw new Error(Object.keys(result.error)[0] + ' - ' + Object.values(result.error)[0]);                        
         }
     })
     .catch(error => {
-        console.log(error)
+        // console.log(error)
         alert(error);
         // location.reload();
     })
@@ -190,9 +190,9 @@ const editThis = (url, event, _callback) => {
     .then(async(response) => {
         // if success - update comment's content and relaod the page
         if (response.status === 204) {
-            console.log(response)
+            // console.log(response)
             const thisElement =  document.querySelector(`#${url}-${event.target.dataset.id}`)
-            console.log(thisElement)
+            // console.log(thisElement)
             
             if(typeof editData  != "undefined"){
                 editData.forEach(target => (
@@ -209,17 +209,17 @@ const editThis = (url, event, _callback) => {
         }
         // if error - show alert and reload the page
         else {
-            console.log(response)
+            // console.log(response)
             let response_body = response.error
             for (let error in response_body.error) {
-                console.log(error);
+                // console.log(error);
                 document.querySelector(`input[name="${error}"]`).classList.add('is-invalid')
             }
             throw new Error(Object.keys(response_body.error)[0] + ' - ' + Object.values(response_body.error)[0]);                     
         }
     })
     .catch(error => {
-        console.log(error)
+        // console.log(error)
         alert(error);
         // location.reload();
     })
@@ -244,7 +244,7 @@ const deleteThis = (url, event) => {
     })
     .then(response => response.json())
     .then(result => {
-        console.log(result)
+        // console.log(result)
         const modal = document.getElementById(`modal_delete_${url}`)
         const mymodal = bootstrap.Modal.getInstance(modal)
         mymodal.hide()
@@ -263,14 +263,14 @@ const deleteThis = (url, event) => {
         else {
             let response_body = result.error
             for (let error in response_body.error) {
-                console.log(error);
+                // console.log(error);
                 document.querySelector(`input[name="${error}"]`).classList.add('is-invalid')
             }
             throw new Error(Object.keys(response_body.error)[0] + ' - ' + Object.values(response_body.error)[0]);                     
         }
     })
     .catch(error => {
-        console.log(error)
+        // console.log(error)
         alert(error);
         // location.reload();
     })

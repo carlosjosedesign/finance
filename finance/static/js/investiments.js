@@ -16,7 +16,7 @@ institutionModal.querySelector('.btn-success').addEventListener('click', functio
 	const form = document.getElementById('add-institution-form')
  	postThis('institutions',form, institutionModal, 
 	function (response) {
-		console.log(response)
+		// console.log(response)
 		const newOption = document.createElement('option')
 		newOption.value = response.id
 		newOption.innerHTML = response.name
@@ -32,7 +32,7 @@ typeModal.querySelector('.btn-success').addEventListener('click', function (even
 	const form = document.getElementById('add-type-form')
 	postThis('create_type',form, typeModal, 
 	function (response) {
-		console.log(response)
+		// console.log(response)
 		const newOption = document.createElement('option')
 		newOption.value = response.id
 		newOption.innerHTML = response.name
@@ -44,7 +44,7 @@ typeModal.querySelector('.btn-success').addEventListener('click', function (even
 })
 
 typeModal.addEventListener('show.bs.modal', function (event) {
-	console.log(maxTypesPercentage)
+	// console.log(maxTypesPercentage)
 	var percentageField = document.querySelector('#typeModal #id_percent')
 	percentageField.setAttribute("max", maxTypesPercentage)
 })
@@ -84,7 +84,7 @@ function newSync(){
 		}
 		
 	})
-	console.log(codes)
+	// console.log(codes)
 
 	fetch('get-prices', {
         method: "POST",
@@ -95,7 +95,7 @@ function newSync(){
     })
     .then(response => response.json())
     .then(result => {
-		console.log(result)
+		// console.log(result)
 		
 		currenciesTotal = []
 		currenciesLines = document.querySelectorAll('.moreTotalsWrapper .moreTotals .currencyTotal')
@@ -110,7 +110,7 @@ function newSync(){
 			totalProducts = 0
 			
 			Object.entries(result.success).forEach(function([key, value]){
-				console.log(key, value);
+				// console.log(key, value);
 				thisCode = key.replace('.SA', '')
 				thisLine = document.querySelector(`.investiment-${thisCode}`)
 				investimentPosition = thisLine.querySelector('.investiment-position').value
@@ -120,14 +120,14 @@ function newSync(){
 				acquisition = parseFloat(thisLine.querySelector('.acquisition .value').innerHTML.replace('.','').replace(',','.').replace(currency,''))	
 
 				price = String(value).replace('.',',')
-				console.log(price)
+				// console.log(price)
 				thisLine.querySelector('.nowprice .value').innerHTML = currency + ' ' + price
 
 				if(quantity != 0){// is an active product
 					revenue = value * quantity
 					profit = ((revenue / acquisition ) - 1 ) * 100
 
-					console.log(profit)
+					// console.log(profit)
 
 					if(investimentPosition == 'SELL' ){
 						if(lastedTrans == 'BUY'){
@@ -154,8 +154,8 @@ function newSync(){
 						totalProducts += userCurrencyRevenue
 					}
 
-					console.log('quantity:' + quantity)
-					console.log('revenue:' + revenue)
+					// console.log('quantity:' + quantity)
+					// console.log('revenue:' + revenue)
 
 					
 					thisLine.querySelector('.revenue .value').innerHTML = coinFormat(revenue, currency)
@@ -170,7 +170,7 @@ function newSync(){
 			Object.entries(result.success).forEach(function([key, value]){
 				thisCode = key.replace('.SA', '')
 				thisLine = document.querySelector(`.investiment-${thisCode}`)
-				console.log(totalProducts)
+				// console.log(totalProducts)
 				quantity = parseFloat(thisLine.querySelector('.quantity .value').innerHTML.replace(',','.'))
 				currency = thisLine.querySelector('.currency-symbol').value
 				goPercent = parseFloat(thisLine.querySelector('.gowallet .value').innerHTML.replace('%',''))
@@ -183,7 +183,7 @@ function newSync(){
 						currencyValue = parseFloat(document.querySelector(`#currencies-info .${currencyCode}`).innerHTML.replace(',','.').replace(userCurrency,''))
 						userCurrencyRevenue = revenue * currencyValue
 						relatedTotal = totalProducts / currencyValue
-						console.log(relatedTotal)
+						// console.log(relatedTotal)
 						walletCurrency = goPercent * relatedTotal
 					}else{
 						walletCurrency = goPercent * totalProducts
@@ -207,7 +207,7 @@ function newSync(){
 			})
 
 			//Change portfolio specific total
-			console.log(currenciesTotal)
+			// console.log(currenciesTotal)
 			currenciesLines.forEach(line => {
 				currency = line.querySelector('strong').innerHTML.trim().replace(':','')
 				line.querySelector('span').innerHTML = coinFormat(currenciesTotal[currency], currency).replace(currency, '')
@@ -256,12 +256,12 @@ function coinFormat (amount, currency){
 }
 
 function startSync(){
-	setInterval( () =>{ console.log('new iteration'); newSync(); } ,5000)
+	setInterval( () =>{ newSync(); } ,5000)
 	// setTimeout( () =>{ console.log('new iteration'); newSync(); } ,5000)
 }
 
 function delaySync(){
-	console.log('new start')
+	// console.log('new start')
 	if( document.querySelectorAll('tbody tr').length > 0){
 		setTimeout( startSync() ,3000)
 	}
@@ -298,7 +298,7 @@ function displayCheck(e) {
 		selections.splice(start, 1);
 	}
 
-	console.log(selections)
+	// console.log(selections)
 
 	var ratingrows = table.querySelectorAll('.rating')
 	var acquisitionrows = table.querySelectorAll('.acquisition')
@@ -362,6 +362,6 @@ function displayCheck(e) {
 //Mobile
 function openInvestimentInfo(id){
 	const line = document.querySelector(`#investiment-${id}`)
-	console.log(line)
+	// console.log(line)
 	line.classList.toggle('show')
 }

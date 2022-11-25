@@ -37,11 +37,6 @@ def index(request):
 
         getBalance = balance(request.user.id)
 
-        print(getBalance)
-        print(getBalance['typesTotal'].get('Ações Brasileiras'))
-
-    
-
         nowPercetages = {}
         maxTypesPercentage = 100
         for type in types:
@@ -51,8 +46,6 @@ def index(request):
                 nowPercetages[type.typeName] = 0
 
             maxTypesPercentage = maxTypesPercentage -  type.percent
-
-        print(nowPercetages)
 
         goalsArray = []
         nowGoal = None
@@ -105,40 +98,12 @@ def getPrices(request):
     if request.method == "POST":
         body = json.loads(request.body)
         codes = body.get('codes')
-        print(codes)
         nowPrices = {}
         prices = get_prices(codes)
         for code in codes:
             nowPrices[code] = prices.tickers[code].info['regularMarketPrice']
 
         return JsonResponse({"success": nowPrices }, status=201)
-
-
-import requests
-
-def getPrice(request, code):
-    print('CODE:', code)
-    price = get_price(code)
-    print(price)
-    
-    # ipca = 433
-    # selic = 432
-
-    # codigo_bcb = selic
-    # API_BCB_URL = 'https://api.bcb.gov.br/dados/serie/bcdata.sgs.{codigo_serie}/dados?formato=json&dataInicial={dataInicial}&dataFinal={dataFinal}'.format(
-    #     codigo_serie = codigo_bcb,
-    #     dataInicial = '1/01/2021',
-    #     dataFinal = '31/12/2022'
-    # )
-
-    # try:
-    #     r = requests.get(API_BCB_URL)
-    #     reponse = r.json()
-    #     print(reponse)
-    # except:
-    #     print('cant')
-    
-    return render(request, "finance/index.html")
 
 @login_required(login_url="finance:login")
 def investiments(request):
@@ -297,9 +262,9 @@ def investiments(request):
         for i in range(len(codes)):
             price = prices.tickers[codes[i]].info['regularMarketPrice']
             nowPrices[codes[i]] = price
-            print( realcodes[i], codes[i])
-            print(portfolio[i])
-            print(portfolio[i].total)
+            # print(realcodes[i], codes[i])
+            # print(portfolio[i])
+            # print(portfolio[i].total)
             thisInvestimentSum = round(float(price) * float(portfolio[i].qnt),2)
             
             currenciesTotal[portfolio[i].currency] = currenciesTotal[portfolio[i].currency] + thisInvestimentSum
@@ -307,7 +272,7 @@ def investiments(request):
             if portfolio[i].currency == user_data.preferences.currency :
                 portfolioTotal = portfolioTotal + thisInvestimentSum 
             else:
-                print(portfolio[i].currency, user_data.preferences.currency , thisInvestimentSum)
+                # print(portfolio[i].currency, user_data.preferences.currency , thisInvestimentSum)
                 thisInvestimentSumUser =  monetaryConversor(portfolio[i].currency, user_data.preferences.currency , thisInvestimentSum)
                 portfolioTotal = portfolioTotal + thisInvestimentSumUser 
         
@@ -376,7 +341,7 @@ def investiments(request):
                 
                     investiment_id = CheckInvestiment.id
 
-                    print('update investiment')
+                    # print('update investiment')
                     
                     if formset.cleaned_data.get("action") == 'SELL':
                         if CheckInvestiment.qnt - formset.cleaned_data.get("quantity") < 0.00:
@@ -386,24 +351,24 @@ def investiments(request):
                         else:
                             CheckInvestiment.position = 'NONE'
 
-                    print(CheckInvestiment.qnt)
-                    print(CheckInvestiment.qnt + formset.cleaned_data.get("quantity"))
+                    # print(CheckInvestiment.qnt)
+                    # print(CheckInvestiment.qnt + formset.cleaned_data.get("quantity"))
 
                     if formset.cleaned_data.get("action") == 'BUY':
                         if CheckInvestiment.qnt + formset.cleaned_data.get("quantity") < 0.00:
-                            print('SELL')
+                            #print('SELL')
                             CheckInvestiment.position = 'SELL'
                         elif CheckInvestiment.qnt + formset.cleaned_data.get("quantity") > 0.00:
-                            print('BUY')
+                            #print('BUY')
                             CheckInvestiment.position = 'BUY'
                         else:
-                            print('NONE')
+                            #print('NONE')
                             CheckInvestiment.position = 'NONE'
                     
                     CheckInvestiment.save()
 
                 else:
-                    print('create investiment')
+                    #print('create investiment')
                     #Crete investiment
                     new_investiment = Investiment(
                         user = User.objects.get(pk=request.user.id),
@@ -453,7 +418,7 @@ def investiment(request, id):
                 "error": _("Investiment does not exist")
         }, status=404)
 
-        print('Type',body.get("type"))
+        #print('Type',body.get("type"))
 
         ThisInvestiment.type = Type.objects.get(pk=body.get("type"), user=request.user) 
         ThisInvestiment.institution = Institution.objects.get(pk=body.get("institution"), user=request.user) 
@@ -487,10 +452,6 @@ def updateInvestimentPosition(investiment_code, user):
             output_field=FloatField()
     )),).get(code=investiment_code, user=user)
 
-    print('QNT >>>', ThisInvestiment.qnt)
-    print(ThisInvestiment.qnt < 0.00)
-    print(ThisInvestiment.qnt > 0.00)
-
     if ThisInvestiment.qnt < 0.00:
         ThisInvestiment.position = 'SELL'
     elif ThisInvestiment.qnt > 0.00:
@@ -513,9 +474,6 @@ def transactions(request):
         transactions = user_data.transactions.order_by("-transaction_date").all().filter(my_q).annotate(
             realDate=Cast('transaction_date', CharField()),
         )
-    
-        for transaction in transactions:
-            print(transaction.transaction_date)
 
         investiments = user_data.investiments.order_by("code").all()
 
@@ -570,16 +528,15 @@ def transactions(request):
 def transaction(request, id):
     if request.method == "PUT":
         body = json.loads(request.body)
-        print('chegou aqui 1')
+
         try:
             object_to_update = Transaction.objects.get(pk=id, user=request.user)
         except (Transaction.DoesNotExist):
-            print('chegou aqui erro')
+
             return JsonResponse({
                 "error": _("Transaction does not exist")
             }, status=404)
 
-        print('chegou aqui 2')
         # Update transaction
         object_to_update.action = body.get('action')
         object_to_update.payprice = body.get('payprice')
@@ -589,7 +546,7 @@ def transaction(request, id):
 
         #Update investiment position
         updateInvestimentPosition(object_to_update.investiment,request.user)
-        print('chegou aqui 3')
+
         return HttpResponse(status=204)
 
     if request.method == "DELETE":
@@ -704,7 +661,7 @@ def create_type(request):
             for type in types:
                 maxTypesPercentage = maxTypesPercentage -  type.percent
 
-            print('maxTypesPercentage',maxTypesPercentage, form.cleaned_data.get("percent"))
+            #print('maxTypesPercentage',maxTypesPercentage, form.cleaned_data.get("percent"))
 
             if form.cleaned_data.get("percent") > maxTypesPercentage:
                 return JsonResponse({
@@ -732,7 +689,7 @@ def create_type(request):
             return JsonResponse(typenData, safe=False)
 
         else:
-            print('invalid')
+            #print('invalid')
             return JsonResponse({
                 "error": form.errors
             }, status=404)
@@ -781,11 +738,11 @@ def create_goal(request):
     if request.method == "POST":
         
         form = CreateGoal(request.POST)
-        print('form')
-        print(form.errors )
+        #print('form')
+        #print(form.errors )
 
         if form.is_valid():
-            print('valid')
+            #print('valid')
             new_goal = Goal(
                 user = User.objects.get(pk=request.user.id),
                 value = form.cleaned_data.get("value"),
@@ -800,7 +757,7 @@ def create_goal(request):
             return JsonResponse(goalData, safe=False)
 
         else:
-            print('invald')
+            #print('invald')
             return JsonResponse({
                 "error": form.errors
             }, status=404)
@@ -834,7 +791,7 @@ def setCurrency(request):
         currency = body.get("currency")
 
         if request.user.is_authenticated:
-            print('is_authenticated')
+            #print('is_authenticated')
             try:
                 obj = UserPreferences.objects.get(user=request.user.id)
                 obj.currency = currency
