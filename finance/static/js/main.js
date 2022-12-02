@@ -244,7 +244,7 @@ const deleteThis = (url, event) => {
     })
     .then(response => response.json())
     .then(result => {
-        // console.log(result)
+        console.log(result)
         const modal = document.getElementById(`modal_delete_${url}`)
         const mymodal = bootstrap.Modal.getInstance(modal)
         mymodal.hide()
@@ -261,16 +261,10 @@ const deleteThis = (url, event) => {
         }
         // if error - show alert and reload the page
         else {
-            let response_body = result.error
-            for (let error in response_body.error) {
-                // console.log(error);
-                document.querySelector(`input[name="${error}"]`).classList.add('is-invalid')
-            }
-            throw new Error(Object.keys(response_body.error)[0] + ' - ' + Object.values(response_body.error)[0]);                     
+            throw new Error(result.error);                     
         }
     })
     .catch(error => {
-        // console.log(error)
         alert(error);
         // location.reload();
     })

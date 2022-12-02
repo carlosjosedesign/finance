@@ -117,7 +117,12 @@ function newSync(){
 				lastedTrans = thisLine.querySelector('.investiment-lastedTrans').value
 				currency = thisLine.querySelector('.currency-symbol').value
 				quantity = parseFloat(thisLine.querySelector('.quantity .value').innerHTML.replace(',','.'))
-				acquisition = parseFloat(thisLine.querySelector('.acquisition .value').innerHTML.replace('.','').replace(',','.').replace(currency,''))	
+				
+				if(userCurrency == 'R$'){
+					acquisition = parseFloat(thisLine.querySelector('.acquisition .value').innerHTML.replace('.','').replace(',','.').replace(currency,''))	
+				}else{
+					acquisition = parseFloat(thisLine.querySelector('.acquisition .value').innerHTML.replace(/[^0-9\.-]+/g,""))	
+				}
 
 				price = String(value).replace('.',',')
 				// console.log(price)
@@ -127,7 +132,8 @@ function newSync(){
 					revenue = value * quantity
 					profit = ((revenue / acquisition ) - 1 ) * 100
 
-					// console.log(profit)
+					// console.log('acquisition', acquisition)
+					// console.log(thisCode, profit)
 
 					if(investimentPosition == 'SELL' ){
 						if(lastedTrans == 'BUY'){

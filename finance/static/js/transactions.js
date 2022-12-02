@@ -13,7 +13,7 @@ const modalEdit = (id, element) => {
 	const modalQuantity= modal.querySelector('#transaction-quantity')
 	modalQuantity.value = Number(nowQuantity.replace(',','.').replace(/[^0-9\.-]+/g,""));
 
-	const nowPrice = document.querySelector(`#transaction-${id} .payprice .value`).innerHTML
+	let nowPrice = document.querySelector(`#transaction-${id} .payprice .value`).innerHTML
 	const modalPrice= modal.querySelector('#transaction-payprice')
 	if( document.querySelector(`#transaction-${id} .payprice .currency`).innerHTML == 'R$'){
 		nowPrice = nowPrice.replace(',','.').replace(/[^0-9\.-]+/g,"")
